@@ -27,9 +27,15 @@ class _AboutPageState extends State<AboutPage>
   void initState() {
     super.initState();
     controller =
-        AnimationController(duration: const Duration(seconds: 30), vsync: this);
+        AnimationController(duration: const Duration(seconds: 60), vsync: this);
     animation = Tween<double>(begin: 0, end: 2 * pi).animate(controller);
     controller.repeat();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override

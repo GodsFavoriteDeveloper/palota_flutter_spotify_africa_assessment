@@ -43,7 +43,7 @@ class AnimatedGradientContainer extends AnimatedWidget {
             AppColors.cyan,
             AppColors.green,
           ],
-          stops: [0.0, 0.5 + (sin(0.5 * animation.value) * 0.1), 1.0],
+          stops: [0.0, 0.5 + (sin(3 * animation.value) * 0.35), 1.0],
         ),
       ),
       alignment: Alignment.center,
