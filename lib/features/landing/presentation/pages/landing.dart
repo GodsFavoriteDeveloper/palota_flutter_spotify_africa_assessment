@@ -6,22 +6,22 @@ import 'package:flutter_spotify_africa_assessment/routes.dart';
 class LandingPage extends StatelessWidget {
   static const String _spotifyCategoryId = "afro";
 
+  const LandingPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: FlareActor(
-          FlareAssets.palotaIntro,
-          alignment: Alignment.center,
-          fit: BoxFit.contain,
-          animation: FlareAssets.palotaIntroAnimationName,
-          callback: (String _) {
-            // wait 1 second before navigating (artificial delay for effect)
-            Future.delayed(Duration(seconds: 1)).then(
-              (value) => _navigateToSpotifyCategoryPage(context),
-            );
-          },
-        ),
+      body: FlareActor(
+        FlareAssets.palotaIntro,
+        alignment: Alignment.center,
+        fit: BoxFit.contain,
+        animation: FlareAssets.palotaIntroAnimationName,
+        callback: (String _) {
+          // wait 1 second before navigating (artificial delay for effect)
+          Future.delayed(const Duration(seconds: 1)).then(
+            (value) => _navigateToSpotifyCategoryPage(context),
+          );
+        },
       ),
     );
   }
