@@ -1,14 +1,36 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spotify_africa_assessment/colors.dart';
-import 'package:flutter_spotify_africa_assessment/features/about/presentation/images/images.dart';
-import 'package:package_info/package_info.dart';
-import 'package:url_launcher/url_launcher.dart' as urlLauncher;
+import 'package:flutter_spotify_africa_assessment/features/about/presentation/components/animated_gradient_container.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-class AboutPage extends StatelessWidget {
+class AboutPage extends StatefulWidget {
   static const String _website = "https://palota.co.za";
   static const String _email = "jobs@palota.co.za";
   static const String _spotifyTerms =
       "https://www.spotify.com/us/legal/end-user-agreement/";
+
+  const AboutPage({Key? key}) : super(key: key);
+
+  @override
+  State<AboutPage> createState() => _AboutPageState();
+}
+
+class _AboutPageState extends State<AboutPage>
+    with SingleTickerProviderStateMixin {
+  late Animation<double> animation;
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(duration: const Duration(seconds: 30), vsync: this);
+    animation = Tween<double>(begin: 0, end: 2 * pi).animate(controller);
+    controller.repeat();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,26 +43,8 @@ class AboutPage extends StatelessWidget {
             floating: false,
             expandedHeight: MediaQuery.of(context).size.width * 0.75,
             flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                padding: EdgeInsets.only(
-                  top: kToolbarHeight,
-                ),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.blue,
-                      AppColors.cyan,
-                      AppColors.green,
-                    ],
-                  ),
-                ),
-                alignment: Alignment.center,
-                child: Image.asset(
-                  AboutImages.logoWhite,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                ),
+              background: AnimatedGradientContainer(
+                animation: animation,
               ),
             ),
           ),
@@ -72,17 +76,17 @@ class AboutPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ElevatedButton(
-                        child: Text("Open Website"),
+                        child: const Text("Open Website"),
                         style: ElevatedButton.styleFrom(
                           primary: AppColors.blue,
                         ),
-                        onPressed: () => _openUrl(_website),
+                        onPressed: () => _openUrl(AboutPage._website),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       ElevatedButton(
-                        child: Text("E-Mail Us"),
+                        child: const Text("E-Mail Us"),
                         style: ElevatedButton.styleFrom(
                           primary: AppColors.green,
                         ),
@@ -103,8 +107,8 @@ class AboutPage extends StatelessWidget {
                         style: Theme.of(context).textTheme.caption,
                       ),
                       TextButton(
-                        onPressed: () => _openUrl(_spotifyTerms),
-                        child: Text("Spotify Terms and Conditions"),
+                        onPressed: () => _openUrl(AboutPage._spotifyTerms),
+                        child: const Text("Spotify Terms and Conditions"),
                         style: TextButton.styleFrom(
                           primary: Colors.white,
                         ),
@@ -135,24 +139,24 @@ class AboutPage extends StatelessWidget {
                 ),
           );
         } else {
-          return SizedBox();
+          return const SizedBox();
         }
       },
     );
   }
 
   Future<bool> _openUrl(String url) async {
-    if (await urlLauncher.canLaunch(url)) {
-      return urlLauncher.launch(url);
+    if (await url_launcher.canLaunch(url)) {
+      return url_launcher.launch(url);
     } else {
       return false;
     }
   }
 
   Future<bool> _launchEmail() async {
-    final emailLink = "mailto:$_email";
-    if (await urlLauncher.canLaunch(emailLink)) {
-      return urlLauncher.launch(emailLink);
+    const emailLink = "mailto:${AboutPage._email}";
+    if (await url_launcher.canLaunch(emailLink)) {
+      return url_launcher.launch(emailLink);
     } else {
       return false;
     }
