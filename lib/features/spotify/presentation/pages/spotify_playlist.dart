@@ -21,6 +21,7 @@ class _SpotifyPlaylistState extends State<SpotifyPlaylist> {
   // Variable we are using to keep track of the search input
   String searchTerm = "";
 
+  // Get playlist data from the API
   Future<Playlist> getPlaylist(BuildContext context) async {
     Playlist playlist =
         await Provider.of<SpotifyProvider>(context, listen: false)
