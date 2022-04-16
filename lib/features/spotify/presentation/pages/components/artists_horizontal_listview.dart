@@ -44,10 +44,12 @@ class _ArtistsViewState extends State<ArtistsView> {
             if (snapshot.hasData) {
               List<SpotifyArtist> artists =
                   snapshot.data as List<SpotifyArtist>;
+
               int maxIndex = 6;
               if (artists.length < 6) {
                 maxIndex = artists.length;
               }
+
               return Container(
                 height: 200,
                 width: MediaQuery.of(context).size.width,
@@ -57,25 +59,34 @@ class _ArtistsViewState extends State<ArtistsView> {
                   itemBuilder: (context, index) {
                     return Container(
                       width: 130,
+                      height: 300,
                       padding:
                           const EdgeInsets.only(left: 0, right: 15, top: 15),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.network(
-                              artists[index].images![0].url ?? "N/A",
-                              width: 120,
-                              height: 120,
+                          Container(
+                            height: 120,
+                            width: 120,
+                            padding: EdgeInsets.all(5),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Image.network(
+                                artists[index].images![0].url ?? "N/A",
+                                width: 110,
+                                height: 110,
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               artists[index].name ?? "N/A",
-                              style: const TextStyle(fontSize: 16),
+                              softWrap: true,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 14),
                             ),
                           )
                         ],

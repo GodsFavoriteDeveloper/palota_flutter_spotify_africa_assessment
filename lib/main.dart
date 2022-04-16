@@ -14,6 +14,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // Provider package has been selected as our State Mangement tool for this app
+    // It allows us to easily have a glabal independent state that we can access across any of our widgets. I prefer this approach rather than lifting state up
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (ctx) => SpotifyProvider()),

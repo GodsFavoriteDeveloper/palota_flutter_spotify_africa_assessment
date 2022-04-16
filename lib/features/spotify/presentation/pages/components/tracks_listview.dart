@@ -12,6 +12,7 @@ class TracklistListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get list of tracks from the Provider. This will filter our tracks by searchTerm. If search is empty everything in the list will be returned
     List<PlaylistItems> tracks =
         Provider.of<SpotifyProvider>(context, listen: false)
             .tracks
@@ -28,7 +29,7 @@ class TracklistListView extends StatelessWidget {
                 return _buildTrackItem(context, tracks[index]);
               }))
           : const Center(
-              child: Text("No reslts for search term"),
+              child: Text("No results for search term"),
             ),
     );
   }

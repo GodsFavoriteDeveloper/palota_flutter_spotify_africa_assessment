@@ -28,10 +28,9 @@ class _PlaylistGridViewState extends State<PlaylistGridView> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        // Reload your futurebuilder and load more data
+        // Reload FutureBuilder and load more data
         pageNumber++;
         setState(() {});
-        // getCategories(pageNumber);
       }
     });
   }
@@ -40,8 +39,6 @@ class _PlaylistGridViewState extends State<PlaylistGridView> {
   void dispose() {
     // TODO: implement dispose
     pageNumber = 1;
-    // _scrollController.dispose();
-
     super.dispose();
   }
 
@@ -62,10 +59,10 @@ class _PlaylistGridViewState extends State<PlaylistGridView> {
                     itemCount: playlists.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12.0,
-                      mainAxisSpacing: 12.0,
-                    ),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12.0,
+                            mainAxisSpacing: 12.0,
+                            childAspectRatio: 1 / 1.19),
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: () {
@@ -74,8 +71,21 @@ class _PlaylistGridViewState extends State<PlaylistGridView> {
                               arguments: playlists[index].id);
                         },
                         child: Container(
-                          child: Image.network(
-                            playlists[index].images![0].url ?? "",
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: Image.network(
+                                  playlists[index].images![0].url ?? "",
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text(
+                                  playlists[index].name ?? "N/A",
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       );

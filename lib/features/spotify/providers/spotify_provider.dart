@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spotify_africa_assessment/features/spotify/models/artist.dart';
 import 'package:flutter_spotify_africa_assessment/features/spotify/models/category.dart';
@@ -106,77 +104,40 @@ class SpotifyProvider with ChangeNotifier {
   // Returns a combined List of Artists from the API. We have limited the artists to 6 for performance reasons as there hundreds of them. In an ideal situation we would pass all IDs at once and get a response. The Spotify API allows that through passing a query param ids but the provided API doesnt allow us.
   Future<List<SpotifyArtist>> combinedListOfArtists(
       List<PlaylistItems> ids) async {
-    // print(ids[0].track!.id);
+    // Create a variable to that will contain our list of Id strings
     List<String> idsList = [];
 
+    // Loop through all the tracks
     for (int i = 0; i < ids.length; i++) {
+      // Assign a variable of type track. Each of these variables contains a List of artists
       Track? selectedtrack = ids[i].track;
+      // Loop through each artist in a track
       for (int i = 0; i < selectedtrack!.artists!.length; i++) {
+        // Pull out the string IDs and add them to our idsList
         idsList.add(selectedtrack.artists![i].id ?? "");
       }
-      // if (ids[i].track != null) {
-      //   idsList.add(ids[i].track!.artists![0].id ?? "");
-      // }
     }
 
-    print(idsList);
-
-    // print(jsonEncode(ids));
-
-    // print(idsList);
-
-    Iterable idss = [
-      "4ZTqTkO2kj1doQrbqQ5KEe",
-      "0byBbjjMnPnPDMosIzKHO4",
-      "6LzSS8yBk2YQpAvQxzOu0M",
-      "260q55nLIeMDgpXiUJYTRK"
-    ];
-
-    // print(idsList);
-    // print(idss);
-    var backToJSOn = jsonEncode(ids);
-
-    var tryd = idsList.take(7).map((e) {
+    // Convert our List to an Iterable. Limited the items to 6 to avoid very long load times
+    var formattedIterable = idsList.take(6).map((e) {
       return e;
     });
 
-    // print(tryd);
-
-    Iterable yes = idsList;
-
-    return Future.wait(tryd.take(6).map((e) {
-      print(e);
+    // We want to wait until all the network requests complete so we have used Future.wait that will allow us to loop through all our items first before the Future completes
+    return Future.wait(formattedIterable.take(6).map((e) {
+      // Pass the string ID to get a single artist
       return getSingleArtistInPlaylist(e);
     }));
 
-    // _allArtistIDsInPlaylist.forEach((element) async {
-    //   // print(element);
-    //   SpotifyArtist result =
-    //       await getSingleArtistInPlaylist(element.toString());
-    //   _artistsListFromAPI.add(result);
-    // });
-    // Future.forEach(_allArtistIDsInPlaylist, (element) async {
-    //   print(element);
-    //   SpotifyArtist result =
-    //       await getSingleArtistInPlaylist(element.toString());
-    //   _artistsListFromAPI.add(result);
-    // });
-    // for (var i = 0; i < 6; i++) {
-    //   SpotifyArtist result =
-    //       await getSingleArtistInPlaylist(_allArtistIDsInPlaylist[i]);
-    //   _artistsListFromAPI.add(result);
-    // }
-    return _artistsListFromAPI;
+    // Because the artists list is for bonus points, I didn't continue to sort the list in order of those that appear the most times in a list.
   }
 
   // Gets an from the API using their ID
   Future<SpotifyArtist> getSingleArtistInPlaylist(String artistId) async {
-    // print(artistId);
     try {
-      var url = Uri.parse("${API.baseURL}artists/${artistId}");
+      var url = Uri.parse("${API.baseURL}artists/$artistId");
       var response = await HTTPService.client.get(url, headers: API.headers);
       final Map<String, dynamic> artistJSON = json.decode(response.body);
-      print(artistJSON);
       SpotifyArtist artist = SpotifyArtist.fromJson(artistJSON);
       return artist;
     } catch (e) {
